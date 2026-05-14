@@ -1,6 +1,6 @@
 <div align="center">
 
-# game-housting-platfrom-worldskill-th-test — Game Hosting Platform
+# game-hosting-platform-worldskill-th-test
 
 **A full-stack web application for hosting, sharing, and playing browser-based games**
 
