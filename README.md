@@ -1,66 +1,213 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div align="center">
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# game-housting-platfrom-worldskill-th-test — Game Hosting Platform
 
-## About Laravel
+**A full-stack web application for hosting, sharing, and playing browser-based games**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+[![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+</div>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Overview
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Module_A** is a full-stack game hosting platform built with **Laravel 10**. The platform allows developers to upload and publish browser-based games (packaged as `.zip` files), while players can browse, play, and compete on leaderboards — all from a single web application.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The project was developed as part of a practical exercise to demonstrate backend architecture skills including RESTful API design, session-based authentication, file handling, version management, and role-based access control.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Features
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### User System
+- **Register & Login** — Session-based authentication with password hashing (bcrypt)
+- **User Profiles** — Public profile page per user (`/user/{username}`)
+- **Account Blocking** — Admins can block/unblock users with a stated reason; blocked users cannot access the platform
 
-### Premium Partners
+### Game Management
+- **Upload Games** — Developers upload a game as a `.zip` file alongside a `.jpg` thumbnail
+- **Version Control** — Each game supports multiple versions; new uploads create a new `GameVersion` record automatically
+- **Game Browser** — Homepage lists all available games for players to browse
+- **Slug-based Routing** — Each game is accessible via a human-readable URL slug (e.g., `/game/my-awesome-game`)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Scoring & Leaderboard
+- **Auto Score Tracking** — Every time a user plays a game, their score is automatically incremented
+- **Per-Version Leaderboard** — Scores are tracked per game version, ensuring fairness when a game is updated
+- **Ranked Leaderboard** — Scores are sorted in descending order for each game version
 
-## Contributing
+### Admin Dashboard
+- **User Management** — View all users, block/unblock accounts with reason
+- **Game Management** — View all games, soft-delete games from the platform
+- **Score Management** — View leaderboards per game, reset top scores, delete individual scores, or wipe all scores for a user
+- **Game Search** — Search games by title keyword
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### REST API
+A versioned REST API (`/api/v1/`) is also provided for external client integration:
+- `POST /api/v1/user/signup` — Register a new user
+- `POST /api/v1/user/signin` — Authenticate and receive a token
+- `POST /api/v1/user/signout` — Invalidate session token
+- `GET /api/v1/user/{username}` — Get public user profile
+- `GET /api/v1/games` — List all games
+- `GET /api/v1/games/uploaded` — List games uploaded by the authenticated user
+- `POST /api/v1/games` — Upload a new game
+- `POST /api/v1/games/update` — Push a new version to an existing game
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Architecture
 
-## Security Vulnerabilities
+```
+Module_A/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/        # Web controllers (HTML responses)
+│   │   │   ├── AuthController.php
+│   │   │   ├── GameController.php
+│   │   │   ├── AdminController.php
+│   │   │   ├── AdminAuthController.php
+│   │   │   └── UserController.php
+│   │   ├── Controllers/Api/    # REST API controllers (JSON responses)
+│   │   │   ├── AuthController.php
+│   │   │   ├── GameController.php
+│   │   │   └── UserController.php
+│   │   └── Middleware/
+│   └── Models/
+│       ├── User.php
+│       ├── Admin.php
+│       ├── Game.php            # Belongs to User, has many GameVersions
+│       ├── GameVersion.php     # Has many Scores
+│       ├── Score.php
+│       └── Session.php
+├── database/
+│   └── migrations/             # Database schema definitions
+├── resources/
+│   └── views/                  # Blade templates
+│       ├── game/               # Game browse, play, upload, update views
+│       ├── user/               # Sign in, sign up, profile views
+│       └── admin/              # Admin dashboard views
+└── routes/
+    ├── web.php                 # Traditional web routes
+    └── api.php                 # REST API routes
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Entity Relationship Summary
+
+```
+User ──< Game ──< GameVersion ──< Score >── User
+                                 (leaderboard per version)
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Framework** | Laravel 10 (PHP 8.1+) |
+| **Database** | MySQL |
+| **Auth (Web)** | Custom session-based auth with bcrypt |
+| **Auth (API)** | JWT (`tymon/jwt-auth`) + Laravel Sanctum |
+| **File Storage** | Local disk — ZipArchive for game extraction |
+| **Frontend** | Blade templates + Vite asset pipeline |
+| **Testing** | PHPUnit 10 |
+| **HTTP Client** | Guzzle 7 |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- PHP 8.1 or higher
+- Composer
+- MySQL
+- Node.js & npm (for asset compilation)
+
+### Installation
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/your-username/Module_A.git
+cd Module_A
+```
+
+**2. Install PHP dependencies**
+```bash
+composer install
+```
+
+**3. Install Node dependencies**
+```bash
+npm install
+```
+
+**4. Configure environment**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Edit `.env` with your database credentials:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=module_a
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+**5. Run database migrations**
+```bash
+php artisan migrate
+```
+
+**6. Create storage symlink**
+```bash
+php artisan storage:link
+```
+
+**7. Build frontend assets & start the server**
+```bash
+npm run dev
+php artisan serve
+```
+
+Visit `http://localhost:8000` in your browser.
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `APP_KEY` | Application encryption key (auto-generated) |
+| `DB_DATABASE` | MySQL database name |
+| `DB_USERNAME` | MySQL username |
+| `DB_PASSWORD` | MySQL password |
+| `FILESYSTEM_DISK` | Storage disk (`local` by default) |
+
+---
+
+## Running Tests
+
+```bash
+php artisan test
+```
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced under the [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+<div align="center">
+
+</div>
